@@ -68,13 +68,21 @@ final_race_data=race_with_time.select(col('race_id'),
 
 # COMMAND ----------
 
-updated_race_data.write.mode('overwrite').parquet('/mnt/tfstorageisgreat53/processed/race')
+updated_race_data.write.mode('overwrite') \
+                       .partitionBy('race_year') \
+                       .parquet('/mnt/tfstorageisgreat53/processed/race')
 # writing the updated data in parquet file format in adls
+# we can partition data in folders with the partitionBy method
 
 # COMMAND ----------
 
 display(spark.read.parquet('/mnt/tfstorageisgreat53/processed/race'))
 # displaying the data from parquet file which is processed in adls
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC Working with partitions
 
 # COMMAND ----------
 
