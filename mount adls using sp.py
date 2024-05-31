@@ -47,7 +47,8 @@ adlsMount('raw', 'tfstorageisgreat53')
 
 # COMMAND ----------
 
-
+# MAGIC %sh 
+# MAGIC ps aux
 
 # COMMAND ----------
 
