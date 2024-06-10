@@ -12,7 +12,7 @@ display(fileMounts)
 result=spark.read \
     .option("header", True) \
     .option("inferSchema", True) \
-    .csv("/mnt/tfstorageisgreat53/raw/circuits.csv")
+    .csv("/mnt/tfstorageisgreat13/raw/circuits.csv")
 display(result)
 type(result)
  # infer schema don't use this in production, for the large data this option will slow down the read speed as it consumer extra jobs.
@@ -57,7 +57,7 @@ circuit_schema = StructType(fields=[StructField("circuitId", IntegerType(), Fals
 circuits_df = spark.read \
     .option("header", True) \
     .schema(circuit_schema) \
-    .csv("/mnt/tfstorageisgreat53/raw/circuits.csv")
+    .csv("/mnt/tfstorageisgreat13/raw/circuits.csv")
 display(circuits_df)
 
 # COMMAND ----------
@@ -137,11 +137,11 @@ display(circuits_final)
 
 # COMMAND ----------
 
-circuits_final.write.mode('overwrite').parquet('/mnt/tfstorageisgreat53/processed/circuits') #exporting table as parquet file to another container
+circuits_final.write.mode('overwrite').parquet('/mnt/tfstorageisgreat13/processed/circuits') #exporting table as parquet file to another container
 
 # COMMAND ----------
 
-df=spark.read.parquet('/mnt/tfstorageisgreat53/processed/circuits/')
+df=spark.read.parquet('/mnt/tfstorageisgreat13/processed/circuits/')
 display(df) #reading the data from parquet file
 
 # COMMAND ----------

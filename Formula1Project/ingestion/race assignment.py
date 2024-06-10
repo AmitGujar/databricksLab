@@ -22,7 +22,7 @@ race_schema = StructType(fields=[StructField("raceId", IntegerType(), False),
 race_info=spark.read \
     .option('header', True) \
     .schema(race_schema) \
-    .csv('/mnt/tfstorageisgreat53/raw/races.csv')
+    .csv('/mnt/tfstorageisgreat13/raw/races.csv')
 # readting the file as per the schema
 
 # COMMAND ----------
@@ -70,20 +70,11 @@ final_race_data=race_with_time.select(col('race_id'),
 
 updated_race_data.write.mode('overwrite') \
                        .partitionBy('race_year') \
-                       .parquet('/mnt/tfstorageisgreat53/processed/race')
+                       .parquet('/mnt/tfstorageisgreat13/processed/race')
 # writing the updated data in parquet file format in adls
 # we can partition data in folders with the partitionBy method
 
 # COMMAND ----------
 
-display(spark.read.parquet('/mnt/tfstorageisgreat53/processed/race'))
+display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/race'))
 # displaying the data from parquet file which is processed in adls
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC Working with partitions
-
-# COMMAND ----------
-
-
