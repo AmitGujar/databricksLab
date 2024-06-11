@@ -55,7 +55,6 @@ drivers_final_df = drivers_final.drop(col('url'))
 
 drivers_final_df.write.mode('overwrite') \
     .parquet('/mnt/tfstorageisgreat13/processed/drivers')
-
 display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/drivers'))
 
 # COMMAND ----------
