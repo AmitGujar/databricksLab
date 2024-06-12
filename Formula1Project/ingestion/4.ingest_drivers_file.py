@@ -9,6 +9,18 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
+# using databricks widgets
+dbutils.widgets.text('p_data_source', '')
+v_data_source = dbutils.widgets.get('p_data_source')
+v_data_source
+
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/common_functions"
+
+# COMMAND ----------
+
 name_schema = StructType(fields=[
     StructField('forename', StringType(), True),
     StructField('surname', StringType(), True)
@@ -39,11 +51,13 @@ drivers_df.printSchema()
 drivers_final = drivers_df.withColumnRenamed('driverId', 'driver_id') \
                           .withColumnRenamed('driverRef', 'driver_ref') \
                           .withColumn('ingestion_date', current_timestamp()) \
-                          .withColumn('name', concat(col('name.forename'), lit(' '), col('name.surname')))
+                          .withColumn('name', concat(col('name.forename'), lit(' '), col('name.surname'))) \
+                          .withColumn('data_source', lit(v_data_source))
 
 # COMMAND ----------
 
 drivers_final_df = drivers_final.drop(col('url'))
+
 
 # COMMAND ----------
 
@@ -59,4 +73,4 @@ display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/drivers'))
 
 # COMMAND ----------
 
-
+dbutils.notebook.exit("Success")

@@ -1,7 +1,19 @@
 # Databricks notebook source
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
 from pyspark.sql.types import *
 from pyspark.sql.functions import *
 #importing the functions
+
+# COMMAND ----------
+
+# using databricks widgets
+dbutils.widgets.text('p_data_source', '')
+v_data_source = dbutils.widgets.get('p_data_source')
+v_data_source
+
 
 # COMMAND ----------
 
@@ -22,7 +34,7 @@ race_schema = StructType(fields=[StructField("raceId", IntegerType(), False),
 race_info=spark.read \
     .option('header', True) \
     .schema(race_schema) \
-    .csv('/mnt/tfstorageisgreat13/raw/races.csv')
+    .csv(f'{raw_folder_path}/races.csv')
 # readting the file as per the schema
 
 # COMMAND ----------
@@ -52,7 +64,8 @@ updated_race_data=race_data.withColumnRenamed('raceId', 'race_id') \
 # COMMAND ----------
 
 race_with_time = updated_race_data.withColumn('ingestion_date', current_timestamp()) \
-                                  .withColumn('race_timestamp', to_timestamp(concat(col('date'), lit(' '), col('time')), 'yyyy-MM-dd HH:mm:ss'))
+                                  .withColumn('race_timestamp', to_timestamp(concat(col('date'), lit(' '), col('time')), 'yyyy-MM-dd HH:mm:ss')) \
+                                  .withColumn('data_source', lit(v_data_source))
 # adding the new column
 
 # COMMAND ----------
@@ -78,3 +91,7 @@ updated_race_data.write.mode('overwrite') \
 
 display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/race'))
 # displaying the data from parquet file which is processed in adls
+
+# COMMAND ----------
+
+dbutils.notebook.exit("Success")

@@ -4,6 +4,14 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
+# using databricks widgets
+dbutils.widgets.text('p_data_source', '')
+v_data_source = dbutils.widgets.get('p_data_source')
+v_data_source
+
+
+# COMMAND ----------
+
 pitstops_schema = StructType(fields=[
     StructField('raceId', IntegerType(), False),
     StructField('driverId', IntegerType(), True),
@@ -26,7 +34,8 @@ pitstop_df = spark.read \
 
 pitstop_final=pitstop_df.withColumnRenamed('raceId', 'race_id') \
                         .withColumnRenamed('driverId', 'driver_id') \
-                        .withColumn('ingestion_date', current_timestamp())
+                        .withColumn('ingestion_date', current_timestamp()) \
+                        .withColumn('data_source', lit(v_data_source))
 # in this we are renaming and adding ingestion date column with current timestamp
 
 
@@ -46,4 +55,4 @@ display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/pitstops'))
 
 # COMMAND ----------
 
-
+dbutils.notebook.exit("Success")

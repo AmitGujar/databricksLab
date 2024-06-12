@@ -4,6 +4,14 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
+# using databricks widgets
+dbutils.widgets.text('p_data_source', '')
+v_data_source = dbutils.widgets.get('p_data_source')
+v_data_source
+
+
+# COMMAND ----------
+
 result_schema = StructType(fields=[
     StructField('resultId', IntegerType(), False),
     StructField('raceId', IntegerType(), True),
@@ -51,7 +59,8 @@ results_dropped=result_renamed.drop(col('statusId'))
 
 # COMMAND ----------
 
-result_final=results_dropped.withColumn('ingestion_date', current_timestamp())
+result_final=results_dropped.withColumn('ingestion_date', current_timestamp()) \
+                            .withColumn('data_source', lit(v_data_source))
 
 # COMMAND ----------
 
@@ -65,4 +74,4 @@ display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/results'))
 
 # COMMAND ----------
 
-
+dbutils.notebook.exit('Success')

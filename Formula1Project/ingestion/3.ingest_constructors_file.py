@@ -3,6 +3,14 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
+# using databricks widgets
+dbutils.widgets.text('p_data_source', '')
+v_data_source = dbutils.widgets.get('p_data_source')
+v_data_source
+
+
+# COMMAND ----------
+
 display(dbutils.fs.mounts())
 
 # COMMAND ----------
@@ -39,7 +47,8 @@ new_constructors_df=constructors_df.drop(col('url'))
 
 constructor_final=new_constructors_df.withColumnRenamed('constructorId', 'constructor_id') \
                                      .withColumnRenamed('constructorRef', 'constructor_ref') \
-                                     .withColumn('ingestion_date', current_timestamp())
+                                     .withColumn('ingestion_date', current_timestamp()) \
+                                     .withColumn('data_source', lit(v_data_source))
 
 # COMMAND ----------
 
@@ -56,4 +65,4 @@ display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/constructors'))
 
 # COMMAND ----------
 
-
+dbutils.notebook.exit('Success')

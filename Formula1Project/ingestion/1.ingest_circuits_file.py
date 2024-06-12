@@ -5,7 +5,15 @@
 # COMMAND ----------
 
 # MAGIC %run "../includes/configuration"
-# MAGIC # we are importing the values from one notebook to another notebook
+# MAGIC
+
+# COMMAND ----------
+
+# using databricks widgets
+dbutils.widgets.text('p_data_source', '')
+v_data_source = dbutils.widgets.get('p_data_source')
+v_data_source
+
 
 # COMMAND ----------
 
@@ -23,7 +31,6 @@ result=spark.read \
     .option("header", True) \
     .option("inferSchema", True) \
     .csv(f"{raw_folder_path}/circuits.csv")
-display(result)
 type(result)
  # infer schema don't use this in production, for the large data this option will slow down the read speed as it consumer extra jobs.
 
@@ -68,7 +75,7 @@ circuits_df = spark.read \
     .option("header", True) \
     .schema(circuit_schema) \
     .csv("/mnt/tfstorageisgreat13/raw/circuits.csv")
-display(circuits_df)
+
 
 # COMMAND ----------
 
@@ -79,7 +86,6 @@ display(circuits_df)
 # COMMAND ----------
 
 newData=circuits_df.select('circuitId', 'circuitRef', 'name', 'location', 'country') #method 1
-display(newData)
 
 # COMMAND ----------
 
@@ -88,7 +94,6 @@ newData=circuits_df.select(circuits_df.circuitId,
                            circuits_df.name, 
                            circuits_df.location, 
                            circuits_df.country) #method 2
-display(newData)
 
 # COMMAND ----------
 
@@ -97,7 +102,6 @@ newData=circuits_df.select(circuits_df["circuitId"],
                            circuits_df["name"], 
                            circuits_df["location"], 
                            circuits_df["country"]) #method 3
-display(newData)
 
 # COMMAND ----------
 
@@ -113,7 +117,7 @@ circuit_df_selected=circuits_df.select(col("circuitId"),
                                        col("lat"),
                                        col("lng"),
                                        col("alt")) #this will update the column name
-display(circuit_df_selected) #method 4
+ #method 4
 
 # COMMAND ----------
 
@@ -127,18 +131,17 @@ renamedDf=circuit_df_selected.withColumnRenamed('circuitId', 'circuit_id') \
                              .withColumnRenamed('lat', 'latitude') \
                              .withColumnRenamed('lng', 'longitude') \
                              .withColumnRenamed('alt', 'altitude')           
-display(renamedDf) #this will rename the value
+#this will rename the value
 
 # COMMAND ----------
 
 temp_circuits_final=renamedDf.withColumn("ingestion_date", current_timestamp())\
 .withColumn('env', lit('Production')) #this will add extra column in existing table & lit will help to add liternal value
-display(temp_circuits_final)
+
 
 # COMMAND ----------
 
-circuits_final=renamedDf.withColumn("ingestion_date", current_timestamp())
-display(circuits_final)
+circuits_final=renamedDf.withColumn("ingestion_date", current_timestamp()).withColumn('data_source', lit(v_data_source)) 
 
 # COMMAND ----------
 
@@ -156,4 +159,4 @@ display(df) #reading the data from parquet file
 
 # COMMAND ----------
 
-
+dbutils.notebook.exit("Success")

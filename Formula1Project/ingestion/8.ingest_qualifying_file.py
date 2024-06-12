@@ -4,6 +4,26 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
+# using databricks widgets
+dbutils.widgets.text('p_data_source', '')
+v_data_source = dbutils.widgets.get('p_data_source')
+v_data_source
+
+
+# COMMAND ----------
+
+dbutils.widgets.help()
+
+# COMMAND ----------
+
+# using databricks widgets
+dbutils.widgets.text('p_data_source', '')
+v_data_source = dbutils.widgets.get('p_data_source')
+v_data_source
+
+
+# COMMAND ----------
+
 # MAGIC %run "../includes/common_functions"
 
 # COMMAND ----------
@@ -32,7 +52,8 @@ qualify_df = spark.read \
 qualify_final = qualify_df.withColumnRenamed('qualifyId', 'qualify_id') \
                           .withColumnRenamed('raceId', 'race_id') \
                           .withColumnRenamed('driverId', 'driver_id') \
-                          .withColumnRenamed('constructorId', 'constructor_id') 
+                          .withColumnRenamed('constructorId', 'constructor_id') \
+                          .withColumn('data_source', lit(v_data_source))
 qualify_final_df = add_ingestion_date(qualify_final)
 # calling another function
 
@@ -45,4 +66,4 @@ display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/qualifying'))
 
 # COMMAND ----------
 
-
+dbutils.notebook.exit("Success")
