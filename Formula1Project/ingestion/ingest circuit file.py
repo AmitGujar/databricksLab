@@ -4,6 +4,16 @@
 
 # COMMAND ----------
 
+# MAGIC %run "../includes/configuration"
+# MAGIC # we are importing the values from one notebook to another notebook
+
+# COMMAND ----------
+
+raw_folder_path
+# checking if import is successful
+
+# COMMAND ----------
+
 fileMounts=dbutils.fs.mounts()
 display(fileMounts)
 
@@ -12,7 +22,7 @@ display(fileMounts)
 result=spark.read \
     .option("header", True) \
     .option("inferSchema", True) \
-    .csv("/mnt/tfstorageisgreat13/raw/circuits.csv")
+    .csv(f"{raw_folder_path}/circuits.csv")
 display(result)
 type(result)
  # infer schema don't use this in production, for the large data this option will slow down the read speed as it consumer extra jobs.
