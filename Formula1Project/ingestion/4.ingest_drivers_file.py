@@ -21,6 +21,10 @@ v_data_source
 
 # COMMAND ----------
 
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
 name_schema = StructType(fields=[
     StructField('forename', StringType(), True),
     StructField('surname', StringType(), True)
@@ -43,7 +47,7 @@ drivers_schema = StructType(fields=[
 
 drivers_df = spark.read \
     .schema(drivers_schema) \
-    .json('/mnt/tfstorageisgreat13/raw/drivers.json')
+    .json(f'{raw_folder_path}/drivers.json')
 drivers_df.printSchema()
 
 # COMMAND ----------
@@ -68,8 +72,8 @@ drivers_final_df = drivers_final.drop(col('url'))
 # COMMAND ----------
 
 drivers_final_df.write.mode('overwrite') \
-    .parquet('/mnt/tfstorageisgreat13/processed/drivers')
-display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/drivers'))
+    .parquet(f'{processed_folder_path}/drivers')
+display(spark.read.parquet(f'{processed_folder_path}/drivers'))
 
 # COMMAND ----------
 

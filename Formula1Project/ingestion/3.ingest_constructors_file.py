@@ -1,4 +1,8 @@
 # Databricks notebook source
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
 from pyspark.sql.functions import *
 
 # COMMAND ----------
@@ -21,7 +25,7 @@ constructors_schema = "constructorId INT, constructorRef STRING, name STRING, na
 
 constructors_df=spark.read \
     .schema(constructors_schema) \
-    .json("/mnt/tfstorageisgreat13/raw/constructors.json")
+    .json(f"{raw_folder_path}/constructors.json")
 
 constructors_df.printSchema()
 
@@ -57,11 +61,11 @@ constructor_final=new_constructors_df.withColumnRenamed('constructorId', 'constr
 
 # COMMAND ----------
 
-constructor_final.write.mode('overwrite').parquet("/mnt/tfstorageisgreat13/processed/constructors")
+constructor_final.write.mode('overwrite').parquet(f"{processed_folder_path}/constructors")
 
 # COMMAND ----------
 
-display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/constructors'))
+display(spark.read.parquet(f"{processed_folder_path}/constructors"))
 
 # COMMAND ----------
 

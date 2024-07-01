@@ -62,9 +62,11 @@ final_df = race_results_df.select("race_year", "race_name", "date", "circuit_loc
 
 # COMMAND ----------
 
-filtered_df = final_df.filter((final_df["race_year"] == 2020) & (final_df["race_name"] == "Abu Dhabi Grand Prix")) \
-    .sort(desc("points"))
+# filtered_df = final_df.filter((final_df["race_year"] == 2020) & (final_df["race_name"] == "Abu Dhabi Grand Prix")) \
+#     .sort(desc("points"))
 # sorting the data in descending points order
+filtered_df = final_df.filter((final_df["race_year"] == 2020))\
+    .sort(desc("points"))
 
 # COMMAND ----------
 

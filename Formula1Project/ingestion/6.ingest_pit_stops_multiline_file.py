@@ -4,6 +4,10 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
 # using databricks widgets
 dbutils.widgets.text('p_data_source', '')
 v_data_source = dbutils.widgets.get('p_data_source')
@@ -25,7 +29,7 @@ lap_times_schema = StructType(fields=[
 
 laptimes_df = spark.read \
     .schema(lap_times_schema) \
-    .csv('/mnt/tfstorageisgreat13/raw/lap_times')
+    .csv(f'{raw_folder_path}/lap_times')
 #    .csv('/mnt/tfstorageisgreat13/raw/lap_times/*.csv') this is another method 
 #use multiline is true if you are reading multiline json file
 
@@ -41,16 +45,16 @@ laptimes_final=laptimes_df.withColumnRenamed('raceId', 'race_id') \
 # COMMAND ----------
 
 laptimes_final.write.mode('overwrite') \
-    .parquet('/mnt/tfstorageisgreat13/processed/laptimes')
+    .parquet(f'{processed_folder_path}/laptimes')
 
 # COMMAND ----------
 
 # MAGIC %fs
-# MAGIC ls /mnt/tfstorageisgreat13/processed
+# MAGIC ls /mnt/tfstorageisgreat16/processed
 
 # COMMAND ----------
 
-display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/laptimes'))
+display(spark.read.parquet(f'{processed_folder_path}/laptimes'))
 
 # COMMAND ----------
 

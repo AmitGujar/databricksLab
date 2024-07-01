@@ -19,16 +19,16 @@ def adlsMount(containerName, storageAccount):
   listMounts=dbutils.fs.mounts
   display(listMounts)
 
-adlsMount('test', 'tfstorageisgreat13')
+adlsMount('test', 'tfstorageisgreat16')
 
 # COMMAND ----------
 
-storageContents=dbutils.fs.ls("/mnt/tfstorageisgreat13/test")
+storageContents=dbutils.fs.ls("/mnt/tfstorageisgreat16/test")
 display(storageContents)
 
 # COMMAND ----------
 
-dataRead=spark.read.csv('/mnt/tfstorageisgreat13/test/circuits.csv')
+dataRead=spark.read.csv('/mnt/tfstorageisgreat16/test/circuits.csv')
 display(dataRead)
 
 # COMMAND ----------
@@ -41,15 +41,6 @@ dbutils.fs.unmount('/mnt/tfstorageisgreat53/test')
 
 # COMMAND ----------
 
-adlsMount('presentation', 'tfstorageisgreat13')
-adlsMount('processed', 'tfstorageisgreat13')
-adlsMount('raw', 'tfstorageisgreat13')
-
-# COMMAND ----------
-
-# MAGIC %sh 
-# MAGIC ps aux
-
-# COMMAND ----------
-
-
+adlsMount('presentation', 'tfstorageisgreat16')
+adlsMount('processed', 'tfstorageisgreat16')
+adlsMount('raw', 'tfstorageisgreat16')

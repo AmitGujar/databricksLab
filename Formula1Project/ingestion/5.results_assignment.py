@@ -4,6 +4,10 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
 # using databricks widgets
 dbutils.widgets.text('p_data_source', '')
 v_data_source = dbutils.widgets.get('p_data_source')
@@ -37,7 +41,7 @@ result_schema = StructType(fields=[
 
 results_df = spark.read \
     .schema(result_schema) \
-    .json('/mnt/tfstorageisgreat13/raw/results.json')
+    .json(f'{raw_folder_path}/results.json')
 
 results_df.printSchema()
 
@@ -66,11 +70,11 @@ result_final=results_dropped.withColumn('ingestion_date', current_timestamp()) \
 
 result_final.write.mode('overwrite') \
     .partitionBy('race_id') \
-    .parquet('/mnt/tfstorageisgreat13/processed/results')
+    .parquet(f'{processed_folder_path}/results')
 
 # COMMAND ----------
 
-display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/results'))
+display(spark.read.parquet(f'{processed_folder_path}/results'))
 
 # COMMAND ----------
 

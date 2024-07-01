@@ -4,6 +4,10 @@ from pyspark.sql.functions import *
 
 # COMMAND ----------
 
+# MAGIC %run "../includes/configuration"
+
+# COMMAND ----------
+
 # using databricks widgets
 dbutils.widgets.text('p_data_source', '')
 v_data_source = dbutils.widgets.get('p_data_source')
@@ -27,7 +31,7 @@ pitstops_schema = StructType(fields=[
 pitstop_df = spark.read \
     .schema(pitstops_schema) \
     .option('multiline', True) \
-    .json('/mnt/tfstorageisgreat13/raw/pit_stops.json')
+    .json(f'{raw_folder_path}/pit_stops.json')
 #use multiline is true if you are reading multiline json file
 
 # COMMAND ----------
@@ -42,16 +46,16 @@ pitstop_final=pitstop_df.withColumnRenamed('raceId', 'race_id') \
 # COMMAND ----------
 
 pitstop_final.write.mode('overwrite') \
-    .parquet('/mnt/tfstorageisgreat13/processed/pitstops')
+    .parquet(f'{processed_folder_path}/pitstops')
 
 # COMMAND ----------
 
 # MAGIC %fs
-# MAGIC ls /mnt/tfstorageisgreat13/processed
+# MAGIC ls /mnt/tfstorageisgreat16/processed
 
 # COMMAND ----------
 
-display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/pitstops'))
+display(spark.read.parquet(f'{processed_folder_path}/pitstops'))
 
 # COMMAND ----------
 

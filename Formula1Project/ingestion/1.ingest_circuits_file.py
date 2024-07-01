@@ -74,7 +74,7 @@ circuit_schema = StructType(fields=[StructField("circuitId", IntegerType(), Fals
 circuits_df = spark.read \
     .option("header", True) \
     .schema(circuit_schema) \
-    .csv("/mnt/tfstorageisgreat13/raw/circuits.csv")
+    .csv("/mnt/tfstorageisgreat16/raw/circuits.csv")
 
 
 # COMMAND ----------
@@ -150,11 +150,11 @@ circuits_final=renamedDf.withColumn("ingestion_date", current_timestamp()).withC
 
 # COMMAND ----------
 
-circuits_final.write.mode('overwrite').parquet('/mnt/tfstorageisgreat13/processed/circuits') #exporting table as parquet file to another container
+circuits_final.write.mode('overwrite').parquet('/mnt/tfstorageisgreat16/processed/circuits') #exporting table as parquet file to another container
 
 # COMMAND ----------
 
-df=spark.read.parquet('/mnt/tfstorageisgreat13/processed/circuits/')
+df=spark.read.parquet('/mnt/tfstorageisgreat16/processed/circuits/')
 display(df) #reading the data from parquet file
 
 # COMMAND ----------

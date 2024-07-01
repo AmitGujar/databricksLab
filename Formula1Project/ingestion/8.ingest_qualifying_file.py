@@ -25,6 +25,11 @@ v_data_source
 # COMMAND ----------
 
 # MAGIC %run "../includes/common_functions"
+# MAGIC
+
+# COMMAND ----------
+
+# MAGIC %run "../includes/configuration"
 
 # COMMAND ----------
 
@@ -45,7 +50,7 @@ qualify_schema = StructType(fields=[
 qualify_df = spark.read \
     .schema(qualify_schema) \
     .option('multiline', True) \
-    .json('/mnt/tfstorageisgreat13/raw/qualifying')
+    .json(f'{raw_folder_path}/qualifying')
 
 # COMMAND ----------
 
@@ -60,9 +65,9 @@ qualify_final_df = add_ingestion_date(qualify_final)
 # COMMAND ----------
 
 qualify_final_df.write.mode('overwrite') \
-    .parquet('/mnt/tfstorageisgreat13/processed/qualifying')
+    .parquet(f'{processed_folder_path}/qualifying')
 
-display(spark.read.parquet('/mnt/tfstorageisgreat13/processed/qualifying'))
+display(spark.read.parquet(f'{processed_folder_path}/qualifying'))
 
 # COMMAND ----------
 
